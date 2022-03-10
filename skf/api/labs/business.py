@@ -1,10 +1,14 @@
+import time, random
+from random import randint
 from skf.database import db
 from skf.database.lab_items import LabItem
+from skf.database.lab_items_code import LabItemCode
+from skf.database.lab_items_code_options import LabItemCodeOptions
 from skf.api.security import log, val_num, val_alpha_num
-import time
 from flask import render_template, Blueprint, jsonify, request, current_app
 from skf.api.labs.deployment_tasks import SKFLabDeployment
 from skf.api.labs.deletion_tasks import SKFLabDelete
+
 
 def get_labs():
     log("User requested list of kb items", "LOW", "PASS")
@@ -12,15 +16,19 @@ def get_labs():
     return result
 
 
-def deploy_labs(instance_name, userid):
+def deploy_labs(instance_id, userid):
+    log("User requested deployment of lab", "LOW", "PASS")
+    result = LabItem.query.filter(LabItem.id == instance_id).first()
     rpc = SKFLabDeployment()
-    body = instance_name + ":" + str(userid)
+    body = result.image_tag + ":" + str(userid)
     response = rpc.call(body)
     return response
 
 
-def delete_labs(instance_name, userid):
+def delete_labs(instance_id, userid):
+    log("User requested depletion of lab", "LOW", "PASS")
+    result = LabItem.query.filter(LabItem.id == instance_id).first()
     rpc = SKFLabDelete()
-    body = instance_name + ":" + str(userid)
+    body = result.image_tag + ":" + str(userid)
     response = rpc.call(body)
     return response

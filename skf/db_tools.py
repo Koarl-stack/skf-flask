@@ -82,7 +82,7 @@ def init_md_knowledge_base():
                     data = open(file, 'r')
                     file_content = data.read()
                     data.close()
-                    content = file_content.translate(str.maketrans({"'":  r"''", "-":  r"", "#":  r""}))
+                    content = file_content.translate(str.maketrans({"'":  r"''", "#":  r""}))
                     try:
                         item = KBItem(title, content, kb_id)
                         item.checklist_category_id = checklist_category_id
@@ -150,7 +150,7 @@ def init_md_testing_examples():
                     except IntegrityError as e:
                         print(e)
                         pass
-        log.info("Initialized the markdown code-examples.")
+        log.info("Initialized the markdown testing-examples.")
         return True
     except:
         raise
